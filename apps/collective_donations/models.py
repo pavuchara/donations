@@ -154,15 +154,13 @@ class Payment(models.Model):
 
     collect = models.ForeignKey(
         Collect,
-        on_delete=models.SET_DEFAULT,
-        default='Удален или не указан',
+        on_delete=models.DO_NOTHING,
         related_name='payments',
         verbose_name='Сбор',
     )
     user = models.ForeignKey(
         DonationsUser,
-        on_delete=models.SET_DEFAULT,
-        default='Удален или не указан',
+        on_delete=models.DO_NOTHING,
         related_name='payments',
         verbose_name='Пользователь',
     )
