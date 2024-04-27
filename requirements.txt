@@ -6,3 +6,4 @@ django-bootstrap5==24.2
 pillow==10.3.0
 django-debug-toolba==4.3.0
 pytils==0.4.1
+djangorestframework==3.15.1

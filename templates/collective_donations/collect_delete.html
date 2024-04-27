@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block title %}
+  {{ title }}
+{% endblock title %}
+
+
+{% block content %}
+  <article class="mb-3">
+    {% include 'includes/collect_card.html' %}
+  </article>
+  <h2>Вы точно хотите удалить?</h2>
+  <form method="post">
+    {% csrf_token %}
+    <div>
+      <button type="submit" class="btn btn-lg btn-danger">
+        Да точно
+      </button>
+    </div>
+  </form>
+{% endblock content %}

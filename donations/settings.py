@@ -31,6 +31,7 @@ INSTALLED_APPS = [
     'apps.collective_donations.apps.CollectiveDonationsConfig',
     'apps.user_app.apps.UserAppConfig',
     'apps.core.apps.CoreConfig',
+    'apps.donations_api.apps.DonationsApiConfig',
     # Базовые приложения:
     'django.contrib.admin',
     'django.contrib.auth',
@@ -41,8 +42,14 @@ INSTALLED_APPS = [
     # Сторонние:
     'django_bootstrap5',
     'debug_toolbar',
+    'rest_framework',
 ]
 
+REST_FRAMEWORK = {
+    "DEFAULT_PERMISSION_CLASSES": [
+        "rest_framework.permissions.AllowAny",
+    ],
+}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

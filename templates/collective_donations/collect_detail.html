@@ -8,7 +8,7 @@
   {% if request.user == collect.author %}
   <div class="mb-3">
     <a class="btn btn-sm btn-outline-secondary" href="{% url 'collective_donations:collect_update' collect.slug %}">Редактировать</a>
-
+    <a class="btn btn-sm btn-outline-secondary" href="{% url 'collective_donations:collect_delete' collect.slug %}">Удалить</a>
   </div>
   {% endif %}
 
@@ -37,13 +37,18 @@
           Добавил: <a href="/">{{ collect.author.username }}</a> |
           <small>{{ collect.create }}</small>
 
-          {% if request.user.is_authenticated %}
-          <p>
-            <a class="btn btn-sm btn-primary mt-3" href="{% url 'collective_donations:donate' collect.slug %}">Помочь</a>
-          </p>
+          {% if collect.collected_amount == collect.target_amount %}
+            <p class="mt-2"><b style="color: green;">Сбор закончен, всем спасибо!</b></p>
+            <p><button class="btn btn-sm btn-primary mt" disabled>Помочь</button></p>
           {% else %}
-            <p><button class="btn btn-sm btn-primary mt-3" disabled>Помочь</button></p>
-            <p><small>Чтобы задонатить необходимо <a href="{% url 'login' %}">авторизироваться.</a></small></p>
+            {% if request.user.is_authenticated %}
+            <p>
+              <a class="btn btn-sm btn-primary mt-3" href="{% url 'collective_donations:donate' collect.slug %}">Помочь</a>
+            </p>
+            {% else %}
+              <p><button class="btn btn-sm btn-primary mt-3" disabled>Помочь</button></p>
+              <p><small>Чтобы задонатить необходимо <a href="{% url 'login' %}">авторизироваться.</a></small></p>
+            {% endif %}
           {% endif %}
         </div>
       </div>

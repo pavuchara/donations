@@ -1,6 +1,7 @@
-from django.views.generic import ListView, CreateView, UpdateView
+from django.urls import reverse_lazy
+from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.shortcuts import get_object_or_404, redirect
+from django.shortcuts import get_object_or_404
 
 from apps.services import constants
 from apps.collective_donations.models import Collect, Payment
@@ -102,6 +103,21 @@ class CollectUpdateView(OnlyAuthorMixin, UpdateView):
 
     def get_context_data(self, **kwargs):
         """Передача title в context."""
+        context = super().get_context_data(**kwargs)
+        context['title'] = self.object.title
+        return context
+
+
+class CollectDeleteView(OnlyAuthorMixin, DeleteView):
+    """Представление: Удаление сбора."""
+
+    model = Collect
+    template_name = 'collective_donations/collect_delete.html'
+    slug_field = 'slug'
+    slug_url_kwarg = 'collect_slug'
+    success_url = reverse_lazy('collective_donations:index')
+
+    def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = self.object.title
         return context

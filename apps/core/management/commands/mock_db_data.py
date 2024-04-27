@@ -17,10 +17,10 @@ from apps.collective_donations.models import Collect, Payment
 DonationsUser = get_user_model()
 
 # Создаваемое кол-во пользователей.
-USERS_COUNT = 1000
+USERS_COUNT = 50
 
 # Создаваемое кол-во карточек сбора.
-COLLECTS_COUNT = 1000
+COLLECTS_COUNT = 100
 
 # Создаваемое кол-во донатов для кажой карточки (ОТ 0 ДО PAYMENT_COUNT).
 # !!!ЭТО ВЕРХНЯЯ ГРАНИЦА РАНДОМА!!!
