@@ -1,0 +1,15 @@
+{% load cache %}
+{% load custom_tags %}
+
+<div class="card mb-4">
+  <div class="card-header">Сайдбар</div>
+
+  <div class="card-body ">
+    {% cache 600 total_collects %}
+      <p>Всего сборов на сайте: {% total_collects %}</p>
+    {% endcache %}
+    {% cache 600 total_payments %}
+    <p>Всего донатов на сайте: {% total_payments %}</p>
+    {% endcache %}
+  </div>
+</div>

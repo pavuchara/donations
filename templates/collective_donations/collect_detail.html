@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+
+{% block title %}
+  {{ title }}
+{% endblock title %}
+
+{% block content %}
+  {% if request.user == collect.author %}
+  <div class="mb-3">
+    <a class="btn btn-sm btn-outline-secondary" href="{% url 'collective_donations:collect_update' collect.slug %}">Редактировать</a>
+
+  </div>
+  {% endif %}
+
+  <div class="card mb-2">
+    <div class="row">
+
+      <div class="col-4">
+        <img src="{{ collect.cover_image.url }}" class="card-img card-img-top" alt="{{ collect.title }}">
+      </div>
+
+      <div class="col-8">
+        <div class="card-body">
+          <h5>{{ collect.title }}</h5>
+
+          <p class="card-text">Цель сбора: {{ collect.occasion }}</p>
+          <p class="card-text">Описание: {{ collect.description }}</p>
+
+          <p class="card-text">
+            Собрано: {{ collect.collected_amount }} p. / {{ collect.target_amount }} p.
+          </p>
+
+          <p class="card-text">
+            <small>Кол-во заданативших: {{ collect.contributors_count }}</small>
+          </p>
+
+          Добавил: <a href="/">{{ collect.author.username }}</a> |
+          <small>{{ collect.create }}</small>
+
+          {% if request.user.is_authenticated %}
+          <p>
+            <a class="btn btn-sm btn-primary mt-3" href="{% url 'collective_donations:donate' collect.slug %}">Помочь</a>
+          </p>
+          {% else %}
+            <p><button class="btn btn-sm btn-primary mt-3" disabled>Помочь</button></p>
+            <p><small>Чтобы задонатить необходимо <a href="{% url 'login' %}">авторизироваться.</a></small></p>
+          {% endif %}
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+  <div>
+    {% if page_obj %}
+      <h2>Донаты:</h2>
+      {% for donate in page_obj %}
+        <article class="mb-3">
+          {% include 'includes/donate_card.html' %}
+        </article>
+      {% endfor %}
+      {% include "includes/paginator.html" %}
+    {% else %}
+      <h2>Донатов пока не было, будь первым!</h2>
+    {% endif %}
+  </div>
+{% endblock content %}

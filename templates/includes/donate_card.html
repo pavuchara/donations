@@ -1,0 +1,25 @@
+<div>
+  <div id="comment-thread-{{ comment.pk }}" class="card border-1 m-1">
+    <div class="row">
+
+      <div class="col-md-1">
+        <img src="{{ donate.user.avatar.url }}" style="width: 50px;height: 50px;object-fit: cover;" alt="{{ donate.user }}" class="rounded-circle m-2"/>
+      </div>
+
+      <div class="col-md-11">
+        <div class="card-body">
+
+          <span class="card-title">
+            <a href="{{ donate.user.get_absolute_url }}">{{ donate.user.get_full_name }} ({{ donate.user.username }})</a>
+            <time>{{ donate.create|date:"d E Y, H:i" }}</time>
+          </span>
+
+          <p class="card-text">Задонатил: {{ donate.amount }} р.</p>
+          <p class="card-text">Комментарий: {{ donate.comment }}</p>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>

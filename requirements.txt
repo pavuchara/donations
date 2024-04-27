@@ -1,0 +1,8 @@
+Django==5.0.4
+python-dotenv==1.0.1
+psycopg==3.1.18
+psycopg-binary==3.1.18
+django-bootstrap5==24.2
+pillow==10.3.0
+django-debug-toolba==4.3.0
+pytils==0.4.1

@@ -1,0 +1,40 @@
+<div class="card">
+  <div class="row">
+
+    <div class="col-3">
+      <img
+        src="{{ collect.cover_image.url }}"
+        alt="{{ collect.title }}"
+        class="img-fluid card-img">
+    </div>
+
+    <div class="col-9">
+      <div class="card-body">
+
+        <h5 class="card-title">
+          <a href="{{ collect.get_absolute_url }}">{{ collect.title }}</a>
+        </h5>
+
+        <small>
+          Причина сбора:
+          {{ collect.occasion }}
+        </small>
+
+        <p class="card-text">{{ collect.description|truncatewords:20 }}</p>
+
+        <p class="card-text">
+          Собрано: {{ collect.collected_amount }} p. / {{ collect.target_amount }} p.
+        </p>
+
+        <p class="card-text">
+          <small>Кол-во заданативших: {{ collect.contributors_count }}</small>
+        </p>
+
+        <small>Автор
+          <a href="{{ collect.author.get_absolute_url }}">{{ collect.author.username }}</a>, {{ collect.create|date:"d E Y, H:i" }}
+        </small>
+
+      </div>
+    </div>
+
+</div>

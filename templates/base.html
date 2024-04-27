@@ -1,0 +1,33 @@
+{% load django_bootstrap5 %}
+{% bootstrap_css %}
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}Денежный сбор{% endblock title %}</title>
+</head>
+<body class="d-flex flex-column min-vh-100">
+  <header>
+    {% include 'includes/header.html' %}
+  </header>
+
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-8 p-4">
+          {% block content %}
+          {% endblock content %}
+      </div>
+
+      <div class="col-4 p-4">
+          {% include 'includes/sidebar.html' %}
+      </div>
+    </div>
+  </div>
+
+  <footer class="py-5 mt-2 mt-auto" style="background-color: #3c6ccd;">
+    {% include 'includes/footer.html' %}
+  </footer>
+</body>
+</html>
