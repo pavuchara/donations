@@ -43,12 +43,22 @@ INSTALLED_APPS = [
     'django_bootstrap5',
     'debug_toolbar',
     'rest_framework',
+    'drf_spectacular',
 ]
 
 REST_FRAMEWORK = {
-    "DEFAULT_PERMISSION_CLASSES": [
-        "rest_framework.permissions.AllowAny",
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAdminUser',
     ],
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
+    'PAGE_SIZE': 4,
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+}
+
+SPECTACULAR_SETTINGS = {
+    "TITLE": "Тествое задание",
+    "DESCRIPTION": "Тествое задание",
+    "VERSION": "1.0.0",
 }
 
 MIDDLEWARE = [

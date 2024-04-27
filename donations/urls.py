@@ -12,7 +12,7 @@ handler500 = 'apps.core.views.custom_500'
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    # path('api/v1/', include('apps.donations_api.urls')),
+    path('api/v1/', include('apps.donations_api.urls')),
     path('', include('apps.collective_donations.urls',
                      namespace='collective_donations')),
     path('', include('apps.user_app.urls', namespace='user_app')),
