@@ -1,10 +1,13 @@
 from django.core.mail import send_mail
+from django.core.paginator import Page
+from django.db.models import Model
 
+from typing import List
 from uuid import uuid4
 from pytils.translit import slugify
 
 
-def unique_slugify(instance, slug: str):
+def unique_slugify(instance: Model, slug: str):
     """
     Генератор уникальных SLUG.
     Если такого slug еще нет, остается исходный.
@@ -17,7 +20,8 @@ def unique_slugify(instance, slug: str):
     return unique_slug
 
 
-def message_for_author(subject, message, from_email, recipient_list):
+def message_for_author(subject: str, message: str,
+                       from_email: str, recipient_list: List[str]) -> None:
     """Отправка письма."""
     send_mail(
         subject=subject,
@@ -26,3 +30,13 @@ def message_for_author(subject, message, from_email, recipient_list):
         recipient_list=[recipient_list],
         fail_silently=True,
     )
+
+
+def get_elided_paginator(page: Page, context: dict) -> dict:
+    """Получение пагинатора с определенным диапазоном страниц."""
+    context['paginator_range'] = page.paginator.get_elided_page_range(
+        page.number,
+        on_each_side=1,
+        on_ends=2,
+    )
+    return context

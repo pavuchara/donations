@@ -4,6 +4,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import get_object_or_404
 
 from apps.services import constants
+from apps.services.utils import get_elided_paginator
 from apps.collective_donations.models import Collect, Payment
 from apps.services.mixins import OnlyAuthorMixin
 from apps.collective_donations.forms import (
@@ -25,11 +26,7 @@ class CollectListView(ListView):
         context = super().get_context_data(**kwargs)
         page = context.get('page_obj')
         if page:
-            context['paginator_range'] = page.paginator.get_elided_page_range(
-                page.number,
-                on_each_side=1,
-                on_ends=2,
-            )
+            context = get_elided_paginator(page, context)
         context['title'] = 'Главная страница'
         return context
 
@@ -63,11 +60,7 @@ class CollectDetailView(ListView):
         context = super().get_context_data(**kwargs)
         page = context.get('page_obj')
         if page:
-            context['paginator_range'] = page.paginator.get_elided_page_range(
-                page.number,
-                on_each_side=1,
-                on_ends=2,
-            )
+            context = get_elided_paginator(page, context)
         context['collect'] = self.collect
         context['title'] = self.collect.title
         return context
@@ -133,7 +126,7 @@ class PaymentCreateView(LoginRequiredMixin, CreateView):
     def dispatch(self, request, *args, **kwargs):
         """Получение сбора в кач-ве атрибута."""
         self.collect = get_object_or_404(
-            Collect,
+            Collect.published.all(),
             slug=kwargs.get('collect_slug')
         )
         return super().dispatch(request, *args, **kwargs)
