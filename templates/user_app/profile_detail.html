@@ -37,7 +37,7 @@
                 <li>Отчество: {{ user.paternal_name }}</li>
               {% endif %}
               {% if user.bio %}
-                <li>О себе: {{ profile.bio }}</li>
+                <li>О себе: {{ user.bio }}</li>
               {% endif %}
             </ul>
             {% if request.user == user %}

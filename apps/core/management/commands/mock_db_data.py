@@ -17,15 +17,15 @@ from apps.collective_donations.models import Collect, Payment
 DonationsUser = get_user_model()
 
 # Создаваемое кол-во пользователей.
-USERS_COUNT = 50
+USERS_COUNT: int = 50
 
 # Создаваемое кол-во карточек сбора.
-COLLECTS_COUNT = 100
+COLLECTS_COUNT: int = 100
 
 # Создаваемое кол-во донатов для кажой карточки (ОТ 0 ДО PAYMENT_COUNT).
 # !!!ЭТО ВЕРХНЯЯ ГРАНИЦА РАНДОМА!!!
 # необходимо установить <= 10 или изменить суммы доната для корректной работы.
-PAYMENT_COUNT = 10
+PAYMENT_COUNT: int = 10
 
 
 class Command(BaseCommand):
