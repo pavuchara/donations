@@ -16,16 +16,16 @@ class Command(BaseCommand):
     help = 'Удаление всех моковых данных, кроме суперюзера'
 
     def handle(self, *args, **options):
-        # Удаление всех оплат
+        # Удаление всех оплат.
         Payment.objects.all().delete()
 
-        # Удаление всех карточек сбора
+        # Удаление всех карточек сбора.
         Collect.objects.all().delete()
 
-        # Получение всех пользователей кроме суперюзера
+        # Получение всех пользователей кроме суперюзера.
         superusers = DonationsUser.objects.filter(is_superuser=True)
 
-        # Удаление всех пользователей кроме суперюзера
+        # Удаление всех пользователей кроме суперюзера.
         DonationsUser.objects.exclude(pk__in=superusers).delete()
 
         self.stdout.write(self.style.SUCCESS(

@@ -35,7 +35,7 @@ class Command(BaseCommand):
             'Установить флаг в apps.services.constants.SEND_EMAILS False')
 
     def handle(self, *args, **options):
-        # Пользователи
+        # Пользователи.
         for i in range(USERS_COUNT):
             DonationsUser.objects.create(
                 first_name=f'user{i}',
@@ -45,7 +45,7 @@ class Command(BaseCommand):
                 email=f'user{i}@example.com',
             )
 
-        # Карточки сбора
+        # Карточки сбора.
         for i in range(COLLECTS_COUNT):
             collect = Collect.objects.create(
                 author=random.choice(DonationsUser.objects.all()),
@@ -60,7 +60,7 @@ class Command(BaseCommand):
                 status='published',
             )
 
-            # Оплата для сбора
+            # Оплата для сбора.
             for j in range(random.randint(0, 10)):
                 Payment.objects.create(
                     collect=collect,

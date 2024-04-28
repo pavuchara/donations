@@ -59,7 +59,7 @@ class PaymentForm(forms.ModelForm):
     def clean_amount(self):
         """Проверка на то, что сумма не превышает сумму сбора."""
         amount = self.cleaned_data.get('amount')
-        
+
         if self.collect and amount is not None:
             current_amount = amount + self.collect.collected_amount
             if current_amount > self.collect.target_amount:
