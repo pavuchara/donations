@@ -43,6 +43,7 @@ class Command(BaseCommand):
                 paternal_name=f'user{i}',
                 username=f'user{i}',
                 email=f'user{i}@example.com',
+                bio=f'{i}',
             )
 
         # Карточки сбора.

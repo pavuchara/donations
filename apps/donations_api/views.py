@@ -1,16 +1,13 @@
-from rest_framework import generics
-from rest_framework.permissions import IsAuthenticated
 from django.shortcuts import get_object_or_404
 from django.contrib.auth import get_user_model
 
-from apps.services.mixins import OnlyAuthorMixinApi
+from rest_framework import generics
+from rest_framework.permissions import IsAuthenticated
+
+from apps.donations_api import serializers
+from apps.services.mixins import OnlyAuthorMixinApi, GetUserMixin
 from apps.collective_donations.models import Collect, Payment
-from apps.donations_api.serializers import (
-    CollectSerializer,
-    CollectFullSerializer,
-    PaymentSerializer,
-    PaymentCreateSerializer,
-)
+
 
 # Получение модели пользователя.
 DonationsUser = get_user_model()
@@ -20,30 +17,21 @@ class CollectListAPIView(generics.ListAPIView):
     """Получение всех сборов."""
 
     queryset = Collect.published_related.all()
-    serializer_class = CollectFullSerializer
-
-
-class CollectUserListAPIView(generics.ListAPIView):
-    """Получение всех сборов пользователя."""
-
-    serializer_class = CollectFullSerializer
-
-    def get_queryset(self):
-        user = get_object_or_404(
-            DonationsUser,
-            username=self.kwargs.get('username'),
-        )
-        queryset = Collect.published_related.filter(author=user)
-        return queryset
+    serializer_class = serializers.CollectFullSerializer
 
 
 class CollectCreateAPIView(generics.CreateAPIView):
     """Представление: Создание сбора."""
 
     permission_classes = [IsAuthenticated]
-    serializer_class = CollectSerializer
+    serializer_class = serializers.CollectSerializer
 
     def perform_create(self, serializer):
+        """
+        Передача пользователя в сериалазер.
+        Проверка на наличие переданного фото, если не передано,
+        устанавливаеся дефолтное.
+        """
         user = self.request.user
         cover_image_default = 'images/default_collect.png'
         cover_image = serializer.validated_data.get('cover_image')
@@ -56,9 +44,9 @@ class CollectRetrieveAPIView(generics.RetrieveAPIView):
     """Представление: Просмотр конкретного сбора."""
 
     queryset = Collect.published_related.all()
+    serializer_class = serializers.CollectFullSerializer
     lookup_field = 'slug'
     lookup_url_kwarg = "collect_slug"
-    serializer_class = CollectFullSerializer
 
 
 class CollectRetrieveUpdateDestroyAPIView(
@@ -68,14 +56,14 @@ class CollectRetrieveUpdateDestroyAPIView(
     queryset = Collect.published_related.all()
     lookup_field = 'slug'
     lookup_url_kwarg = "collect_slug"
-    serializer_class = CollectSerializer
+    serializer_class = serializers.CollectSerializer
     permission_classes = [OnlyAuthorMixinApi]
 
 
 class PaymentListAPIView(generics.ListAPIView):
     """Представление: Донаты относящиеся к конкретному сбору."""
 
-    serializer_class = PaymentSerializer
+    serializer_class = serializers.PaymentSerializer
 
     def get_queryset(self):
         object = get_object_or_404(
@@ -91,7 +79,7 @@ class PaymentCreateAPIView(generics.CreateAPIView):
     """Представление: Создание доната."""
 
     permission_classes = [IsAuthenticated]
-    serializer_class = PaymentCreateSerializer
+    serializer_class = serializers.PaymentCreateSerializer
 
     def get_collect_object(self):
         """Получение объекта сбора."""
@@ -111,3 +99,38 @@ class PaymentCreateAPIView(generics.CreateAPIView):
         context = super().get_serializer_context()
         context['collect'] = self.get_collect_object()
         return context
+
+
+class UserListApiView(generics.ListAPIView):
+    """Представление: получение всех пользователей."""
+
+    serializer_class = serializers.UserSerializer
+    queryset = DonationsUser.objects.all()
+
+
+class UserRetrieveApiView(GetUserMixin, generics.RetrieveAPIView):
+    """Представление: получение конкретного пользователя."""
+
+    serializer_class = serializers.UserSerializer
+
+
+class UserCollectListAPIView(GetUserMixin, generics.ListAPIView):
+    """Представление: получение всех сборов пользователя."""
+
+    serializer_class = serializers.CollectFullSerializer
+
+    def get_queryset(self):
+        queryset = Collect.published_related.filter(author=self.get_object())
+        return queryset
+
+
+class UserPaymentListApiView(GetUserMixin, generics.ListAPIView):
+    """Представление: получение всех донатов пользователя."""
+
+    serializer_class = serializers.PaymentSerializer
+
+    def get_queryset(self):
+        queryset = Payment.objects.select_related(
+            'user',
+        ).filter(user=self.get_object())
+        return queryset

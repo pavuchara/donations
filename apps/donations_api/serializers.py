@@ -1,6 +1,12 @@
+from django.contrib.auth import get_user_model
+
 from rest_framework import serializers
 
 from apps.collective_donations.models import Collect, Payment
+
+
+# Получение модели пользователя.
+DonationUser = get_user_model()
 
 
 class CollectSerializer(serializers.ModelSerializer):
@@ -65,3 +71,17 @@ class PaymentCreateSerializer(serializers.ModelSerializer):
                     'Сумма платежа не может превышать целевую сумму сбора.'
                 )
         return data
+
+
+class UserSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = DonationUser
+        fields = (
+            'first_name',
+            'last_name',
+            'paternal_name',
+            'email',
+            'avatar',
+            'bio',
+        )
