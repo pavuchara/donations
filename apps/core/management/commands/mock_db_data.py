@@ -29,7 +29,10 @@ PAYMENT_COUNT = 10
 
 
 class Command(BaseCommand):
-    help = 'Заполнение моковыми данными'
+    help = ('Заполнение БД моковыми данными '
+            '!!!Локально создаются email на каждый сбор и донат!!!'
+            'Для отключения сообщений на время доната необходимо'
+            'Установить флаг в apps.services.constants.SEND_EMAILS False')
 
     def handle(self, *args, **options):
         # Пользователи
@@ -70,4 +73,4 @@ class Command(BaseCommand):
                     ),
                 )
 
-        self.stdout.write(self.style.SUCCESS('Успешно наполнено.'))
+        self.stdout.write(self.style.SUCCESS('БД успешно наполнена.'))

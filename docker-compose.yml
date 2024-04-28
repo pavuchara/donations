@@ -1,0 +1,37 @@
+version: '3'
+
+services:
+  django:
+    build: .
+    container_name: donations
+    command: >
+      sh -c "sleep 5 && python manage.py runserver 0.0.0.0:8000"
+    volumes:
+      - .:/usr/src/app
+    ports:
+      - 8000:8000
+    depends_on:
+      - pgdb
+    env_file: .env
+    networks:
+      - donations_network
+
+  pgdb:
+    image: postgres
+    environment:
+      - POSTGRES_DB=${POSTGRESQL_NAME}
+      - POSTGRES_USER=${POSTGRESQL_USER}
+      - POSTGRES_PASSWORD=${POSTGRESQL_PASSWORD}
+    container_name: pgdb
+    volumes:
+      - pgdbdata:/var/lib/postgresql/data/
+    networks:
+      - donations_network
+
+volumes:
+  pgdbdata:
+    external: true
+
+networks:
+  donations_network:
+    external: true

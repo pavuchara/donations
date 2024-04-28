@@ -139,7 +139,8 @@ class Collect(models.Model):
             self.slug = unique_slugify(self, self.title)
             message = f'Cбор создан: {self.title}'
         # Отправка письма
-        message_for_author(subject, message, from_email, recipient_list)
+        if constants.SEND_EMAILS:
+            message_for_author(subject, message, from_email, recipient_list)
         super().save(*args, **kwargs)
 
 
@@ -222,11 +223,12 @@ class Payment(models.Model):
         self.collect.save()
 
         # Отправка письма
-        subject = 'Message'
-        message = f'Спасибо за донат для {self.collect.title}'
-        from_email = 'from@example.com'
-        recipient_list = [self.user.email]
-        message_for_author(subject, message, from_email, recipient_list)
+        if constants.SEND_EMAILS:
+            subject = 'Message'
+            message = f'Спасибо за донат для {self.collect.title}'
+            from_email = 'from@example.com'
+            recipient_list = [self.user.email]
+            message_for_author(subject, message, from_email, recipient_list)
 
         super().save(*args, **kwargs)
 

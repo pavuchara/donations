@@ -55,3 +55,6 @@ PATERNAL_NAME_LEN = 30
 MAX_PAYMENT_VALUE = (f'Сумма в рублях, максимальное занчение: '
                      f'{'9' * (PAIMENT_MAX_DIGITS - PAIMENT_DECIMAL_PLACES)}.'
                      f'{'9' * PAIMENT_DECIMAL_PLACES}')
+
+# Флаг на отправку Email-сообщений (пока хранятся локально).
+SEND_EMAILS = True

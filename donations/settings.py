@@ -18,7 +18,7 @@ SECRET_KEY = str(os.getenv('DJANGO_SECRET_KEY'))
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', '0.0.0.0', '0.0.0.0:8000']
 
 INTERNAL_IPS = [
     '127.0.0.1',
@@ -172,3 +172,10 @@ EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
 
 # Путь сохранения писем.
 EMAIL_FILE_PATH = BASE_DIR / 'sent_emails'
+
+# стандартный метод кэширования.
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+    }
+}
