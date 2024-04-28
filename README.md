@@ -150,3 +150,6 @@ python manage.py createsuperuser
 docker-compose exec django python manage.py createsuperuser
 ```
 
+## Как выглядит:
+
+![визуально](/media/prew.png)
