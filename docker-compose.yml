@@ -17,7 +17,7 @@ services:
       - donations_network
 
   pgdb:
-    image: postgres
+    image: postgres:15-alpine
     environment:
       - POSTGRES_DB=${POSTGRESQL_NAME}
       - POSTGRES_USER=${POSTGRESQL_USER}
