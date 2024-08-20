@@ -4,6 +4,8 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.views.generic.edit import CreateView
 
+from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
+
 from apps.user_app.forms import DonationsUserCreateForm
 
 handler404 = 'apps.core.views.custom_404'
@@ -13,6 +15,8 @@ handler500 = 'apps.core.views.custom_500'
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/v1/', include('apps.donations_api.urls')),
+    path('api/v1/schema/', SpectacularAPIView.as_view(), name='schema'),
+    path('api/v1/docs/', SpectacularSwaggerView.as_view(url_name='schema'), name='docs'),
     path('', include('apps.collective_donations.urls',
                      namespace='collective_donations')),
     path('', include('apps.user_app.urls', namespace='user_app')),

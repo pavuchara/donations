@@ -24,6 +24,7 @@ class DonationsUser(AbstractUser):
     avatar = models.ImageField(
         upload_to='images/user_avatar',
         default='images/default_user.jpg',
+        null=True,
         blank=True,
         validators=[FileExtensionValidator(allowed_extensions=(
             'png', 'jpg', 'jpeg'
@@ -52,5 +53,4 @@ class DonationsUser(AbstractUser):
                        kwargs={'username': self.username})
 
     def get_full_name(self):
-        # Получение фио.
         return f'{self.first_name} {self.last_name} {self.paternal_name}'

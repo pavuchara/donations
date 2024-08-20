@@ -60,3 +60,10 @@ class UserProfileUpdateView(UpdateView):
             username=self.kwargs.get('username'),
         )
         return object
+
+    def form_valid(self, form):
+        if 'avatar' in form.changed_data:
+            if not form.cleaned_data['avatar']:
+                form.instance.avatar = 'images/default_user.jpg'
+
+        return super().form_valid(form)

@@ -54,8 +54,8 @@ PATERNAL_NAME_LEN: int = 30
 # Help text для заполнения target_amount исходя из ограничений.
 MAX_PAYMENT_VALUE: str = (
     f'Сумма в рублях, максимальное занчение: '
-    f'{'9' * (PAIMENT_MAX_DIGITS - PAIMENT_DECIMAL_PLACES)}.'
-    f'{'9' * PAIMENT_DECIMAL_PLACES}'
+    f'{"9" * (PAIMENT_MAX_DIGITS - PAIMENT_DECIMAL_PLACES)}.'
+    f'{"9" * PAIMENT_DECIMAL_PLACES}'
 )
 
 # Флаг на отправку Email-сообщений (пока хранятся локально).

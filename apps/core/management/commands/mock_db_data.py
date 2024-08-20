@@ -12,6 +12,7 @@ import random
 
 from apps.collective_donations.models import Collect, Payment
 
+# TODO - Bulk create
 
 # Получение модель пользователя.
 DonationsUser = get_user_model()
@@ -23,14 +24,14 @@ USERS_COUNT: int = 50
 COLLECTS_COUNT: int = 100
 
 # Создаваемое кол-во донатов для кажой карточки (ОТ 0 ДО PAYMENT_COUNT).
-# !!!ЭТО ВЕРХНЯЯ ГРАНИЦА РАНДОМА!!!
+# ЭТО ВЕРХНЯЯ ГРАНИЦА РАНДОМА
 # необходимо установить <= 10 или изменить суммы доната для корректной работы.
 PAYMENT_COUNT: int = 10
 
 
 class Command(BaseCommand):
     help = ('Заполнение БД моковыми данными '
-            '!!!Локально создаются email на каждый сбор и донат!!!'
+            'Локально создаются email на каждый сбор и донат'
             'Для отключения сообщений на время доната необходимо'
             'Установить флаг в apps.services.constants.SEND_EMAILS False')
 

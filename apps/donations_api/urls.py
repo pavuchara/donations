@@ -1,43 +1,14 @@
 from django.urls import path
 
-from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
-
 from apps.donations_api import views
 
 
 urlpatterns = [
-    path('collects/',
-         views.CollectListAPIView.as_view(),
-         name='collect_list'),
-    path('collects/create/',
-         views.CollectCreateAPIView.as_view(),
-         name='collect_create'),
-    path('collects/<slug:collect_slug>/',
-         views.CollectRetrieveAPIView.as_view(),
-         name='collect_detail'),
-    path('collects/<slug:collect_slug>/update/',
-         views.CollectRetrieveUpdateDestroyAPIView.as_view(),
-         name='collect_update_delete'),
-    path('collects/<slug:collect_slug>/donats/',
-         views.PaymentListAPIView.as_view(),
-         name='donats'),
-    path('collects/<slug:collect_slug>/donate/',
-         views.PaymentCreateAPIView.as_view(),
-         name='donate'),
-    path('users/',
-         views.UserListApiView.as_view(),
-         name='users'),
-    path('users/<str:username>/',
-         views.UserRetrieveApiView.as_view(),
-         name='user_detail'),
-    path('users/<str:username>/collects/',
-         views.UserCollectListAPIView.as_view(),
-         name='user_collect_list'),
-    path('users/<str:username>/payments/',
-         views.UserPaymentListApiView.as_view(),
-         name='user_payments_list'),
-    path('schema/', SpectacularAPIView.as_view(), name='schema'),
-    path('schema/swagger-ui/',
-         SpectacularSwaggerView.as_view(url_name='schema'),
-         name='swagger-ui')
+     path('users/', views.UserCreateListView.as_view()),
+     path('users/<int:user_id>/', views.UserRetriveUpdateView.as_view()),
+     path('collects/', views.CollectCreateListView.as_view()),
+     path('collects/<int:collect_id>/', views.CollectRetriveUpdateView.as_view()),
+     path('collects/<int:collect_id>/payments/', views.CollectPaymentListCreateView.as_view()),
+     path('payments/', views.PaymentListView.as_view()),
+     path('payments/<int:payment_id>/', views.PaymentUpdateView.as_view()),
 ]

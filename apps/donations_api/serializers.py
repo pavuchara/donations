@@ -9,79 +9,85 @@ from apps.collective_donations.models import Collect, Payment
 DonationUser = get_user_model()
 
 
-class CollectSerializer(serializers.ModelSerializer):
-    """Серриализатор: показ определенных полей сбора."""
-
-    class Meta:
-        model = Collect
-        fields = (
-            'title',
-            'occasion',
-            'description',
-            'target_amount',
-            'cover_image',
-            'end_datetime',
-        )
-
-
-class CollectFullSerializer(serializers.ModelSerializer):
-    """Серриализатор: показ сбора."""
-
-    class Meta:
-        model = Collect
-        fields = '__all__'
-
-
-class PaymentSerializer(serializers.ModelSerializer):
-    """Серриализатор: показ доната."""
-
-    class Meta:
-        model = Payment
-        fields = (
-            'user',
-            'create',
-            'amount',
-            'comment',
-        )
-
-
-class PaymentCreateSerializer(serializers.ModelSerializer):
-    """Серриализатор: создание доната."""
-
-    class Meta:
-        model = Payment
-        fields = (
-            'amount',
-            'comment',
-            'payment_method',
-        )
-
-    def validate(self, data):
-        """
-        Проверка валидности платежа.
-        Сумма не должна превышать сумму сбора.
-        """
-        amount = data.get('amount')
-        collect = self.context.get('collect')
-
-        if collect and amount is not None:
-            current_amount = amount + collect.collected_amount
-            if current_amount > collect.target_amount:
-                raise serializers.ValidationError(
-                    'Сумма платежа не может превышать целевую сумму сбора.'
-                )
-        return data
-
-
 class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = DonationUser
         fields = (
+            'id',
             'first_name',
             'last_name',
             'paternal_name',
             'email',
             'avatar',
             'bio',
+            'password',
         )
+        read_only_fields = ['id']
+        extra_kwargs = {
+            'password': {'write_only': True},
+        }
+
+
+class CollectSerializer(serializers.ModelSerializer):
+    """Серриализатор: показ определенных полей сбора."""
+
+    class Meta:
+        model = Collect
+        fields = (
+            'id',
+            'author',
+            'title',
+            'slug',
+            'occasion',
+            'target_amount',
+            'contributors_count',
+            'collected_amount',
+            'contributors_count',
+            'cover_image',
+            'end_datetime',
+            'create',
+            'status',
+        )
+        read_only_fields = [
+            'id',
+            'author',
+            'collected_amount',
+            'contributors_count',
+            'create',
+            'status',
+        ]
+        extra_kwargs = {
+            'password': {'write_only': True},
+        }
+
+
+class PaymentSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Payment
+        fields = [
+            'id',
+            'collect',
+            'user',
+            'amount',
+            'comment',
+            'create',
+            'payment_method',
+            'payment_id',
+        ]
+        read_only_fields = [
+            'id',
+            'collect',
+            'user',
+            'create',
+            'payment_id',
+        ]
+
+
+class PaymentUpdateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Payment
+        fields = [
+            'comment',
+        ]
