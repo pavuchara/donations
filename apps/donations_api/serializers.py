@@ -31,7 +31,7 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class CollectSerializer(serializers.ModelSerializer):
-    author = UserSerializer()
+    author = UserSerializer(read_only=True)
 
     class Meta:
         model = Collect
@@ -60,9 +60,14 @@ class CollectSerializer(serializers.ModelSerializer):
             'password': {'write_only': True},
         }
 
+    def validate_target_amount(self, value):
+        if value < 0 or (self.instance and value < self.instance.target_amount):
+            raise serializers.ValidationError('Сумма должна быть больше нуля и текущей суммы сбора')
+        return value
+
 
 class PaymentSerializer(serializers.ModelSerializer):
-    user = UserSerializer()
+    user = UserSerializer(read_only=True)
 
     class Meta:
         model = Payment
@@ -88,9 +93,9 @@ class PaymentSerializer(serializers.ModelSerializer):
         """Сумма платежа не дожна превышать целевую сумму сбора."""
         collect = self._get_collect()
         new_amount = collect.collected_amount + value
-        if new_amount > collect.target_amount:
+        if new_amount > collect.target_amount or value < 0:
             raise serializers.ValidationError(
-                f'Сумма платежа не может превышать целевую сумму сбора.'
+                f'Сумма платежа не может превышать целевую сумму сбора или == 0'
                 f'Укажите сумму до {collect.target_amount - collect.collected_amount} р.'
             )
         return value

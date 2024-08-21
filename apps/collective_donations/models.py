@@ -3,6 +3,7 @@ from django.db import models, transaction
 from django.urls import reverse
 from django.utils import timezone
 from django.contrib.auth import get_user_model
+from django.core.cache import cache
 from django.core.exceptions import ValidationError
 from django.core.validators import FileExtensionValidator, MinValueValidator
 
@@ -10,6 +11,7 @@ import uuid
 
 from apps.services import constants
 from apps.services.utils import unique_slugify
+from apps.donations_api.cache_keys import ALL_COLLECTS, ALL_PAYMENTS
 
 # Получение модели пользователя.
 DonationsUser = get_user_model()
@@ -66,12 +68,14 @@ class Collect(models.Model):
     target_amount = models.DecimalField(
         max_digits=constants.PAIMENT_MAX_DIGITS,
         decimal_places=constants.PAIMENT_DECIMAL_PLACES,
+        validators=[MinValueValidator(0)],
         verbose_name='План сбора',
         help_text=constants.MAX_PAYMENT_VALUE,
     )
     collected_amount = models.DecimalField(
         max_digits=constants.PAIMENT_MAX_DIGITS,
         decimal_places=constants.PAIMENT_DECIMAL_PLACES,
+        validators=[MinValueValidator(0)],
         default=0,
         verbose_name='Собрано',
     )
@@ -130,6 +134,7 @@ class Collect(models.Model):
         """
         if not self.pk:
             self.slug = unique_slugify(self, self.title)
+        cache.delete(ALL_COLLECTS)
         # Отправка письма
         super().save(*args, **kwargs)
 
@@ -160,6 +165,7 @@ class Payment(models.Model):
     amount = models.DecimalField(
         max_digits=constants.PAIMENT_MAX_DIGITS,
         decimal_places=constants.PAIMENT_DECIMAL_PLACES,
+        validators=[MinValueValidator(0)],
         verbose_name='Сумма',
     )
     comment = models.CharField(
@@ -214,6 +220,7 @@ class Payment(models.Model):
         self.collect.collected_amount += self.amount
         self.collect.contributors_count += 1
         self.collect.save()
+        cache.delete(ALL_PAYMENTS)
         super().save(*args, **kwargs)
 
     def delete(self, *args, **kwargs):

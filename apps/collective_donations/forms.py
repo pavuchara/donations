@@ -32,9 +32,9 @@ class CollectFormUpdate(CollectFormCreate):
         """
         collected_amount = self.instance.collected_amount
         target_amount = self.cleaned_data.get('target_amount')
-        if collected_amount > target_amount:
+        if collected_amount > target_amount or collected_amount < 0:
             raise forms.ValidationError(
-                f'Сумма не может быть меньше собранной({collected_amount} р.).'
+                f'Сумма не может быть меньше собранной({collected_amount} р.). или == 0'
             )
         return target_amount
 
@@ -62,7 +62,7 @@ class PaymentForm(forms.ModelForm):
         amount = self.cleaned_data.get('amount')
         if self.collect and amount is not None:
             current_amount = amount + self.collect.collected_amount
-            if current_amount > self.collect.target_amount:
+            if current_amount > self.collect.target_amount or amount < 0:
                 raise forms.ValidationError(
                     'Сумма платежа не может превышать целевую сумму сбора.'
                 )

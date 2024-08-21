@@ -6,6 +6,8 @@ from rest_framework.permissions import AllowAny
 from drf_spectacular.utils import extend_schema
 
 from apps.donations_api import serializers
+from apps.donations_api.mixins import SimpleListCacheMixin
+from apps.donations_api.cache_keys import ALL_COLLECTS, ALL_PAYMENTS
 from apps.collective_donations.models import Collect, Payment
 from apps.donations_api.permissions import (
     OnlyProfileOwnerPermission,
@@ -53,9 +55,13 @@ class UserCollectsListView(generics.ListAPIView):
 
 
 @extend_schema(tags=["Collects"])
-class CollectCreateListView(generics.ListCreateAPIView):
+class CollectCreateListView(SimpleListCacheMixin, generics.ListCreateAPIView):
     queryset = Collect.published.all()
     serializer_class = serializers.CollectSerializer
+    instance_cache_key = ALL_COLLECTS
+
+    def perform_create(self, serializer):
+        serializer.save(author=self.request.user)
 
 
 @extend_schema(tags=["Collects"])
@@ -66,7 +72,7 @@ class CollectRetriveUpdateView(generics.RetrieveUpdateAPIView):
     lookup_url_kwarg = 'collect_id'
 
 
-@extend_schema(tags=["Payments"])
+@extend_schema(tags=["Collects"])
 class CollectPaymentListCreateView(generics.ListCreateAPIView):
     queryset = Payment.objects.all()
     serializer_class = serializers.PaymentSerializer
@@ -85,9 +91,10 @@ class CollectPaymentListCreateView(generics.ListCreateAPIView):
 
 
 @extend_schema(tags=["Payments"])
-class PaymentListView(generics.ListAPIView):
+class PaymentListView(SimpleListCacheMixin, generics.ListAPIView):
     queryset = Payment.objects.all()
     serializer_class = serializers.PaymentSerializer
+    instance_cache_key = ALL_PAYMENTS
 
 
 @extend_schema(tags=["Payments"])
