@@ -1,4 +1,5 @@
 from django.urls import reverse_lazy
+from django.core.exceptions import ValidationError
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import get_object_or_404
@@ -141,6 +142,7 @@ class PaymentCreateView(LoginRequiredMixin, CreateView):
         """Передача в форму сбора для валидации."""
         kwargs = super().get_form_kwargs()
         kwargs['collect'] = self.collect
+        kwargs['user'] = self.request.user
         return kwargs
 
     def form_valid(self, form):

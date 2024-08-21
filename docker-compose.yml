@@ -10,6 +10,7 @@ services:
     volumes:
       - static:/backend_static/static
       - media:/app/media
+      - ./sent_emails:/app/sent_emails
 
   donations_db:
     image: postgres:15-alpine
@@ -30,7 +31,28 @@ services:
       - static:/donations_static
       - media:/donations_media
 
+  donations_redis:
+    container_name: donations_redis
+    image: redis:7.4.0
+    expose:
+      - 6379
+    volumes:
+      - redis-data:/data
+
+  donations_celery:
+    container_name: donations_celery
+    build:  .
+    env_file: .env
+    command: sh /app/selery_startup.sh
+    depends_on:
+      - donations_redis
+      - donations_db
+      - donations_backend
+    volumes:
+      - .:/app
+
 volumes:
   pg_data:
   static:
   media:
+  redis-data:

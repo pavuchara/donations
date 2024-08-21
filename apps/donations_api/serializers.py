@@ -1,3 +1,4 @@
+from django.shortcuts import get_object_or_404
 from django.contrib.auth import get_user_model
 
 from rest_framework import serializers
@@ -30,7 +31,7 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class CollectSerializer(serializers.ModelSerializer):
-    """Серриализатор: показ определенных полей сбора."""
+    author = UserSerializer()
 
     class Meta:
         model = Collect
@@ -47,7 +48,6 @@ class CollectSerializer(serializers.ModelSerializer):
             'cover_image',
             'end_datetime',
             'create',
-            'status',
         )
         read_only_fields = [
             'id',
@@ -55,7 +55,6 @@ class CollectSerializer(serializers.ModelSerializer):
             'collected_amount',
             'contributors_count',
             'create',
-            'status',
         ]
         extra_kwargs = {
             'password': {'write_only': True},
@@ -63,6 +62,7 @@ class CollectSerializer(serializers.ModelSerializer):
 
 
 class PaymentSerializer(serializers.ModelSerializer):
+    user = UserSerializer()
 
     class Meta:
         model = Payment
@@ -84,6 +84,26 @@ class PaymentSerializer(serializers.ModelSerializer):
             'payment_id',
         ]
 
+    def validate_amount(self, value):
+        """Сумма платежа не дожна превышать целевую сумму сбора."""
+        collect = self._get_collect()
+        new_amount = collect.collected_amount + value
+        if new_amount > collect.target_amount:
+            raise serializers.ValidationError(
+                f'Сумма платежа не может превышать целевую сумму сбора.'
+                f'Укажите сумму до {collect.target_amount - collect.collected_amount} р.'
+            )
+        return value
+
+    def validate(self, attrs):
+        """Пользователь не может донатить сам себе."""
+        if self.context['request'].user == self._get_collect().author:
+            raise serializers.ValidationError('Самому себе нельзя донатить')
+        return super().validate(attrs)
+
+    def _get_collect(self):
+        return get_object_or_404(Collect, pk=self.context['view'].kwargs.get('collect_id'))
+
 
 class PaymentUpdateSerializer(serializers.ModelSerializer):
     class Meta:
@@ -91,3 +111,15 @@ class PaymentUpdateSerializer(serializers.ModelSerializer):
         fields = [
             'comment',
         ]
+
+
+class UserPaymentSerializer(serializers.ModelSerializer):
+
+    class Meta(PaymentSerializer.Meta):
+        pass
+
+
+class UserCollectSerializer(serializers.ModelSerializer):
+
+    class Meta(CollectSerializer.Meta):
+        pass

@@ -9,7 +9,7 @@ from django.core.validators import FileExtensionValidator, MinValueValidator
 import uuid
 
 from apps.services import constants
-from apps.services.utils import unique_slugify, message_for_author
+from apps.services.utils import unique_slugify
 
 # Получение модели пользователя.
 DonationsUser = get_user_model()
@@ -127,20 +127,10 @@ class Collect(models.Model):
     def save(self, *args, **kwargs):
         """
         Генерация slug при сохранении.
-        Если сбор новый, то сгенерируется на основе title
-        или уникальный(если на основе title уже есть).
-        Автору отправляется письмо о содании/редактировании.
         """
-        subject = f'{self.title}'
-        message = f'Cбор отредактирован: {self.title}'
-        from_email = 'from@example.com'
-        recipient_list = [self.author.email]
         if not self.pk:
             self.slug = unique_slugify(self, self.title)
-            message = f'Cбор создан: {self.title}'
         # Отправка письма
-        if constants.SEND_EMAILS:
-            message_for_author(subject, message, from_email, recipient_list)
         super().save(*args, **kwargs)
 
 
@@ -210,26 +200,20 @@ class Payment(models.Model):
         Проверка на уровне БД, что сумма не превышает, сумму сбора
         при добавлении новой оплаты.
         Если все ок, то доавбляется +1 к задонатившим и сумма доната.
-        Автору отправляется письмо.
         """
         current_amount = self.amount + self.collect.collected_amount
         if current_amount > self.collect.target_amount:
             raise ValidationError(
                 'Сумма платежа не может превышать целевую сумму сбора.'
             )
+        if self.user == self.collect.author:
+            raise ValidationError(
+                'Самому себе нельзя длнатить.'
+            )
 
         self.collect.collected_amount += self.amount
         self.collect.contributors_count += 1
         self.collect.save()
-
-        # Отправка письма
-        if constants.SEND_EMAILS:
-            subject = 'Message'
-            message = f'Спасибо за донат для {self.collect.title}'
-            from_email = 'from@example.com'
-            recipient_list = [self.user.email]
-            message_for_author(subject, message, from_email, recipient_list)
-
         super().save(*args, **kwargs)
 
     def delete(self, *args, **kwargs):
