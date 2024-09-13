@@ -3,10 +3,10 @@ from django.contrib.auth import get_user_model
 from django.views.generic import ListView, UpdateView
 from django.core.exceptions import PermissionDenied
 
-from apps.services.utils import get_elided_paginator
-from apps.user_app.forms import DonationUserUpdateForm
-from apps.collective_donations.models import Collect
-from apps.services import constants
+from services.utils import get_elided_paginator
+from user_app.forms import DonationUserUpdateForm
+from collective_donations.models import Collect
+from services import constants
 
 
 DonationsUser = get_user_model()

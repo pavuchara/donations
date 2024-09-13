@@ -10,7 +10,7 @@ from django.contrib.auth import get_user_model
 
 import random
 
-from apps.collective_donations.models import Collect, Payment
+from collective_donations.models import Collect, Payment
 
 # TODO - Bulk create
 
@@ -33,7 +33,7 @@ class Command(BaseCommand):
     help = ('Заполнение БД моковыми данными '
             'Локально создаются email на каждый сбор и донат'
             'Для отключения сообщений на время доната необходимо'
-            'Установить флаг в apps.services.constants.SEND_EMAILS False')
+            'Установить флаг в services.constants.SEND_EMAILS False')
 
     def handle(self, *args, **options):
         # Пользователи.

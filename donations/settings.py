@@ -32,10 +32,10 @@ INTERNAL_IPS = [
 
 INSTALLED_APPS = [
     # Self apps
-    'apps.collective_donations.apps.CollectiveDonationsConfig',
-    'apps.user_app.apps.UserAppConfig',
-    'apps.core.apps.CoreConfig',
-    'apps.donations_api.apps.DonationsApiConfig',
+    'collective_donations.apps.CollectiveDonationsConfig',
+    'user_app.apps.UserAppConfig',
+    'core.apps.CoreConfig',
+    'donations_api.apps.DonationsApiConfig',
     # Base:
     'django.contrib.admin',
     'django.contrib.auth',
@@ -201,7 +201,7 @@ AUTH_USER_MODEL = 'user_app.DonationsUser'
 LOGIN_REDIRECT_URL = 'collective_donations:index'
 
 # Представление для хендлера 403csrf.
-CSRF_FAILURE_VIEW = 'apps.core.views.custom_403csrf'
+CSRF_FAILURE_VIEW = 'core.views.custom_403csrf'
 
 # Бекенд Email
 EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'

@@ -1,4 +1,4 @@
-from apps.user_app.models import DonationsUser
+from user_app.models import DonationsUser
 from django.contrib import admin
 from django.contrib.auth import get_user_model
 

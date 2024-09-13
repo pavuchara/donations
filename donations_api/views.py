@@ -5,11 +5,11 @@ from rest_framework import generics
 from rest_framework.permissions import AllowAny
 from drf_spectacular.utils import extend_schema
 
-from apps.donations_api import serializers
-from apps.donations_api.mixins import SimpleListCacheMixin
-from apps.donations_api.cache_keys import ALL_COLLECTS, ALL_PAYMENTS
-from apps.collective_donations.models import Collect, Payment
-from apps.donations_api.permissions import (
+from donations_api import serializers
+from donations_api.mixins import SimpleListCacheMixin
+from donations_api.cache_keys import ALL_COLLECTS, ALL_PAYMENTS
+from collective_donations.models import Collect, Payment
+from donations_api.permissions import (
     OnlyProfileOwnerPermission,
     OnlyAuthorPermission,
     OnlyOwnerPermission,

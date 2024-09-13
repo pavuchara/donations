@@ -3,7 +3,7 @@ from django.contrib.auth import get_user_model
 
 from rest_framework import serializers
 
-from apps.collective_donations.models import Collect, Payment
+from collective_donations.models import Collect, Payment
 
 
 # Получение модели пользователя.

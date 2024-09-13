@@ -1,6 +1,6 @@
 from django import forms
 
-from apps.collective_donations.models import Collect, Payment
+from collective_donations.models import Collect, Payment
 
 
 class CollectFormCreate(forms.ModelForm):

@@ -9,9 +9,9 @@ from django.core.validators import FileExtensionValidator, MinValueValidator
 
 import uuid
 
-from apps.services import constants
-from apps.services.utils import unique_slugify
-from apps.donations_api.cache_keys import ALL_COLLECTS, ALL_PAYMENTS
+from services import constants
+from services.utils import unique_slugify
+from donations_api.cache_keys import ALL_COLLECTS, ALL_PAYMENTS
 
 # Получение модели пользователя.
 DonationsUser = get_user_model()

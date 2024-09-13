@@ -6,7 +6,7 @@
 from django.core.management.base import BaseCommand
 from django.contrib.auth import get_user_model
 
-from apps.collective_donations.models import Collect, Payment
+from collective_donations.models import Collect, Payment
 
 # Получение модели пользователя.
 DonationsUser = get_user_model()

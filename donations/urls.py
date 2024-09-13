@@ -6,21 +6,21 @@ from django.views.generic.edit import CreateView
 
 from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
 
-from apps.user_app.forms import DonationsUserCreateForm
+from user_app.forms import DonationsUserCreateForm
 
-handler404 = 'apps.core.views.custom_404'
-handler500 = 'apps.core.views.custom_500'
+handler404 = 'core.views.custom_404'
+handler500 = 'core.views.custom_500'
 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/v1/', include('apps.donations_api.urls')),
+    path('api/v1/', include('donations_api.urls')),
     path('api/v1/schema/', SpectacularAPIView.as_view(), name='schema'),
     path('api/v1/docs/', SpectacularSwaggerView.as_view(url_name='schema'), name='docs'),
-    path('', include('apps.collective_donations.urls',
+    path('', include('collective_donations.urls',
                      namespace='collective_donations')),
-    path('', include('apps.user_app.urls', namespace='user_app')),
-    path('', include('apps.core.urls', namespace='core')),
+    path('', include('user_app.urls', namespace='user_app')),
+    path('', include('core.urls', namespace='core')),
     path('auth/', include('django.contrib.auth.urls')),
     path('auth/registration/',
          CreateView.as_view(

@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 
-from apps.collective_donations.models import Collect, Payment
+from collective_donations.models import Collect, Payment
 
 
 @admin.register(Collect)

@@ -1,6 +1,6 @@
 from django import template
 
-from apps.collective_donations.models import Collect, Payment
+from collective_donations.models import Collect, Payment
 
 
 register = template.Library()

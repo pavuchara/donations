@@ -5,7 +5,7 @@ from rest_framework_simplejwt.views import (
      TokenRefreshView,
 )
 
-from apps.donations_api import views
+from donations_api import views
 
 
 urlpatterns = [

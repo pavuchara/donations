@@ -1,6 +1,6 @@
 from django.urls import path
 
-from apps.collective_donations import views
+from collective_donations import views
 
 
 app_name = 'collective_donations'

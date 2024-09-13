@@ -4,11 +4,11 @@ from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import get_object_or_404
 
-from apps.services import constants
-from apps.services.utils import get_elided_paginator
-from apps.collective_donations.models import Collect, Payment
-from apps.services.mixins import OnlyAuthorMixin
-from apps.collective_donations.forms import (
+from services import constants
+from services.utils import get_elided_paginator
+from collective_donations.models import Collect, Payment
+from services.mixins import OnlyAuthorMixin
+from collective_donations.forms import (
     CollectFormCreate,
     PaymentForm,
     CollectFormUpdate,
