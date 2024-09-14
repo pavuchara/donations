@@ -4,7 +4,7 @@ from django.contrib.auth.models import AbstractUser
 from django.core.exceptions import ValidationError
 from django.core.validators import FileExtensionValidator
 
-from services import constants
+from user_app import constants
 
 
 class DonationsUser(AbstractUser):

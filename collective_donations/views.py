@@ -1,13 +1,12 @@
 from django.urls import reverse_lazy
-from django.core.exceptions import ValidationError
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import get_object_or_404
 
-from services import constants
-from services.utils import get_elided_paginator
+from collective_donations import constants
 from collective_donations.models import Collect, Payment
-from services.mixins import OnlyAuthorMixin
+from core.services import get_elided_paginator
+from collective_donations.mixins import OnlyAuthorMixin
 from collective_donations.forms import (
     CollectFormCreate,
     PaymentForm,

@@ -15,7 +15,7 @@ docker compose up --build -d
 TODO: образы бы на докерхаб, но нет смысла уже ...
 
 ## Прочее:
-**1. При создании моковых данных, добавлен флаг (services.constants.SEND_EMAILS):**
+**1. При создании моковых данных, добавлен флаг (SEND_EMAILS):**
 ```
 SEND_EMAILS = True
 ```

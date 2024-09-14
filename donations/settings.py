@@ -23,11 +23,6 @@ DEBUG = os.getenv('DEBUG', 'True') == 'True'
 # TODO Fix this on prod
 ALLOWED_HOSTS = ['*']
 
-INTERNAL_IPS = [
-    '127.0.0.1',
-    'localhost',
-]
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -45,7 +40,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     # Other apps:
     'django_bootstrap5',
-    'debug_toolbar',
     'rest_framework',
     'drf_spectacular',
 ]
@@ -73,7 +67,6 @@ MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
-    'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
@@ -178,16 +171,16 @@ BROKER_URL = 'redis://' + REDIS_HOST + ':' + REDIS_PORT + '/0'
 BROKER_TRANSPORT_OPTIONS = {'visibility_timeout': 3600}
 CELERY_RESULT_BACKEND = 'redis://' + REDIS_HOST + ':' + REDIS_PORT + '/0'
 
-# стандартный метод кэширования.
-CACHES = {
-    'default': {
-        'BACKEND': 'django.core.cache.backends.redis.RedisCache',
-        'LOCATION': 'redis://' + REDIS_HOST + ':' + REDIS_PORT,
-        'OPTIONS': {
-            'db': '10',
-        },
+if not DEBUG:
+    CACHES = {
+        'default': {
+            'BACKEND': 'django.core.cache.backends.redis.RedisCache',
+            'LOCATION': 'redis://' + REDIS_HOST + ':' + REDIS_PORT,
+            'OPTIONS': {
+                'db': '10',
+            },
+        }
     }
-}
 
 
 DEBUG_TOOLBAR_CONFIG = {

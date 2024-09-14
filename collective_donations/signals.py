@@ -1,7 +1,7 @@
 from django.dispatch import receiver
 from django.db.models.signals import post_save
 
-from services import constants
+from core import constants
 from collective_donations.tasks import send_mail_task
 from collective_donations.models import Payment
 

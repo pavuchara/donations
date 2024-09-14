@@ -1,3 +1,5 @@
+from decimal import Decimal
+
 from django.db import IntegrityError
 from django.db import models, transaction
 from django.urls import reverse
@@ -9,8 +11,8 @@ from django.core.validators import FileExtensionValidator, MinValueValidator
 
 import uuid
 
-from services import constants
-from services.utils import unique_slugify
+from collective_donations import constants
+from core.services import unique_slugify
 from donations_api.cache_keys import ALL_COLLECTS, ALL_PAYMENTS
 
 # Получение модели пользователя.
@@ -68,15 +70,15 @@ class Collect(models.Model):
     target_amount = models.DecimalField(
         max_digits=constants.PAIMENT_MAX_DIGITS,
         decimal_places=constants.PAIMENT_DECIMAL_PLACES,
-        validators=[MinValueValidator(0)],
+        validators=[MinValueValidator(Decimal('0'))],
         verbose_name='План сбора',
         help_text=constants.MAX_PAYMENT_VALUE,
     )
     collected_amount = models.DecimalField(
         max_digits=constants.PAIMENT_MAX_DIGITS,
         decimal_places=constants.PAIMENT_DECIMAL_PLACES,
-        validators=[MinValueValidator(0)],
-        default=0,
+        validators=[MinValueValidator(Decimal('0'))],
+        default=Decimal('0'),
         verbose_name='Собрано',
     )
     contributors_count = models.PositiveIntegerField(
@@ -165,7 +167,7 @@ class Payment(models.Model):
     amount = models.DecimalField(
         max_digits=constants.PAIMENT_MAX_DIGITS,
         decimal_places=constants.PAIMENT_DECIMAL_PLACES,
-        validators=[MinValueValidator(0)],
+        validators=[MinValueValidator(Decimal('0'))],
         verbose_name='Сумма',
     )
     comment = models.CharField(

@@ -61,7 +61,7 @@ class CollectSerializer(serializers.ModelSerializer):
         }
 
     def validate_target_amount(self, value):
-        if value < 0 or (self.instance and value < self.instance.target_amount):
+        if value < 0 or (self.instance and value < self.instance.collected_amount):
             raise serializers.ValidationError('Сумма должна быть больше нуля и текущей суммы сбора')
         return value
 
