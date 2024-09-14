@@ -13,7 +13,7 @@ from donations_api.tests.user_constans import (
 )
 from donations_api.tests.collects_constants import (
     CORRECT_COLLECT_CREATE_DATA,
-    CORRECT_PARTIAL_UPDARE_DATA,
+    CORRECT_UPDARE_DATA,
     Incorrect_collect_create_data,
 )
 
@@ -85,26 +85,33 @@ class CollectsUpdateTestCase(TestCase):
         self.collect_path = f'/api/v1/collects/{self.collect.pk}/'
 
     def test_partial_update_collect_auth_user_correct_data(self):
-        for k, v in CORRECT_PARTIAL_UPDARE_DATA.items():
+        for k, v in CORRECT_UPDARE_DATA.items():
             with self.subTest(name=f'correct {k}'):
                 response = self.user_author_client.patch(self.collect_path, {k: v})
                 self.assertEqual(response.status_code, status.HTTP_200_OK)
                 self.collect.refresh_from_db()
                 collect = model_to_dict(Collect.objects.get(pk=response.data.get('id')))
                 collect['end_datetime'] = datetime.strftime(collect['end_datetime'], '%Y-%m-%d')
-                self.assertEqual(collect[k], CORRECT_PARTIAL_UPDARE_DATA[k])
-
-    def test_not_author_cant_edit_collect(self):
-        response = self.user_not_author_client.patch(self.collect_path, {'slug': 'string2'})
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
-        self.collect.refresh_from_db()
-        self.assertEqual(self.collect.slug, CORRECT_COLLECT_CREATE_DATA['slug'])
+                self.assertEqual(collect[k], CORRECT_UPDARE_DATA[k])
 
     def test_update_collect_auth_user_correct_data(self):
-        response = self.user_author_client.put(self.collect_path, CORRECT_PARTIAL_UPDARE_DATA)
+        response = self.user_author_client.put(self.collect_path, CORRECT_UPDARE_DATA)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.collect.refresh_from_db()
         collect = model_to_dict(Collect.objects.get(pk=self.collect.pk))
         collect['end_datetime'] = datetime.strftime(collect['end_datetime'], '%Y-%m-%d')
-        for key in CORRECT_PARTIAL_UPDARE_DATA:
-            self.assertEqual(collect[key], CORRECT_PARTIAL_UPDARE_DATA[key])
+        for key in CORRECT_UPDARE_DATA:
+            self.assertEqual(collect[key], CORRECT_UPDARE_DATA[key])
+
+    def test_not_author_or_anonymous_cant_edit_collect(self):
+        users_data = (
+            (self.user_not_author_client, status.HTTP_403_FORBIDDEN),
+            (self.anon_user, status.HTTP_401_UNAUTHORIZED)
+        )
+
+        for user_client, response_status in users_data:
+            with self.subTest(name=f'{user_client}'):
+                response = user_client.patch(self.collect_path, {'slug': 'string2'})
+                self.assertEqual(response.status_code, response_status)
+                self.collect.refresh_from_db()
+                self.assertEqual(self.collect.slug, CORRECT_COLLECT_CREATE_DATA['slug'])

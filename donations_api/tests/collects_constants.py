@@ -11,7 +11,7 @@ CORRECT_COLLECT_CREATE_DATA = {
     'end_datetime': (datetime.today() + timedelta(days=1)).strftime('%Y-%m-%d')
 }
 
-CORRECT_PARTIAL_UPDARE_DATA = {
+CORRECT_UPDARE_DATA = {
     'title': 'string1',
     'slug': 'string2',
     'occasion': 'string3',
