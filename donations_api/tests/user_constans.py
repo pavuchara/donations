@@ -45,7 +45,8 @@ INCORRECT_USER_PARTIAL_UPDARE_DATA = {
 
 CORRECT_USER_UPDARE_DATA = {
     'first_name': 'Марсель1',
-    'last_name': 'Павук',
+    'last_name': 'Павук1',
+    'username': 'marsel1',
     'paternal_name': 'Павукович',
     'email': 'marsel@marsel.com',
     'password': 'very_strong_pass',
