@@ -71,6 +71,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'donations.middleware.CustomLoguruMiddleware'
 ]
 
 ROOT_URLCONF = 'donations.urls'
@@ -185,6 +186,13 @@ if not DEBUG:
 
 DEBUG_TOOLBAR_CONFIG = {
     'SHOW_TOOLBAR_CALLBACK': lambda request: DEBUG,
+}
+
+LOGURU_CONFIG = {
+    'rotation': '10 MB',
+    'retention': '2 days',
+    'compression': 'zip',
+    'enqueue': True,
 }
 
 # Переопределенная модель пользователя.
