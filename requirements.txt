@@ -19,6 +19,7 @@ iniconfig==2.0.0
 jsonschema==4.23.0
 jsonschema-specifications==2023.12.1
 kombu==5.4.0
+loguru==0.7.2
 packaging==24.1
 pillow==10.3.0
 pluggy==1.5.0
@@ -42,3 +43,4 @@ tzdata==2024.1
 uritemplate==4.1.1
 vine==5.1.0
 wcwidth==0.2.13
+win32-setctime==1.1.0
