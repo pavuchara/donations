@@ -1,3 +1,5 @@
+import logging
+
 from django.shortcuts import get_object_or_404
 from django.contrib.auth import get_user_model
 
@@ -95,6 +97,11 @@ class PaymentListView(SimpleListCacheMixin, generics.ListAPIView):
     queryset = Payment.objects.all()
     serializer_class = serializers.PaymentSerializer
     instance_cache_key = ALL_PAYMENTS
+
+    def get(self, request, *args, **kwargs):
+        logging.error("QWEQWEQWE")
+        raise ValueError()
+        return super().get(request, *args, **kwargs)
 
 
 @extend_schema(tags=["Payments"])
